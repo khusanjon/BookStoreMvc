@@ -33,7 +33,7 @@ namespace BookStore.UnitTests
             controller.pageSize = 3;
 
             // действие (act)
-            BooksListViewModel result = (BooksListViewModel)controller.List(2).Model;
+            BooksListViewModel result = (BooksListViewModel)controller.List(null, 2).Model;
 
             // Утверждение (assert)
             List<Book> books = result.Books.ToList();
@@ -88,8 +88,7 @@ namespace BookStore.UnitTests
             controller.pageSize = 3;
 
             // Act
-            BooksListViewModel result
-                = (BooksListViewModel)controller.List(2).Model;
+            BooksListViewModel result = (BooksListViewModel)controller.List(null, 2).Model;
 
             // Assert
             PagingInfo pageInfo = result.PagingInfo;

@@ -20,11 +20,12 @@ namespace BookStore.WebUI.Controllers
             repository = repo;
         }
 
-        public ViewResult List(int page = 1)
+        public ViewResult List(string category, int page = 1)
         {
             BooksListViewModel model = new BooksListViewModel
             {
                 Books = repository.Books
+                    .Where(p => category == null || p.Category == category)
                     .OrderBy(game => game.BookId)
                     .Skip((page - 1) * pageSize)
                     .Take(pageSize),
@@ -33,7 +34,8 @@ namespace BookStore.WebUI.Controllers
                     CurrentPage = page,
                     ItemsPerPage = pageSize,
                     TotalItems = repository.Books.Count()
-                }
+                },
+                CurrentCategory = category
             };
             return View(model);
         }
