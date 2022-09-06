@@ -1,0 +1,9 @@
+﻿@model BookStore.Domain.Entities.Book
+
+<div class="well">
+    <h3>
+        <strong>@Model.Name</strong>
+        <span class="pull-right label label-primary">@Model.Price.ToString("# Сум")</span>
+    </h3>
+    <span class="lead">@Model.Author</span>
+</div>
