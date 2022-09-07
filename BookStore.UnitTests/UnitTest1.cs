@@ -97,5 +97,57 @@ namespace BookStore.UnitTests
             Assert.AreEqual(pageInfo.TotalItems, 5);
             Assert.AreEqual(pageInfo.TotalPages, 2);
         }
+
+        [TestMethod]
+        public void Can_Filter_Books()
+        {
+            // Организация (arrange)
+            Mock<IBookRepository> mock = new Mock<IBookRepository>();
+            mock.Setup(m => m.Books).Returns(new List<Book>
+            {
+                new Book { BookId = 1, Name = "Книга1", Category="Cat1"},
+                new Book { BookId = 2, Name = "Книга2", Category="Cat2"},
+                new Book { BookId = 3, Name = "Книга3", Category="Cat1"},
+                new Book { BookId = 4, Name = "Книга4", Category="Cat2"},
+                new Book { BookId = 5, Name = "Книга5", Category="Cat3"}
+            });
+            BookController controller = new BookController(mock.Object);
+            controller.pageSize = 3;
+
+            // Action
+            List<Book> result = ((BooksListViewModel)controller.List("Cat2", 1).Model)
+                .Books.ToList();
+
+            // Assert
+            Assert.AreEqual(result.Count(), 2);
+            Assert.IsTrue(result[0].Name == "Книга2" && result[0].Category == "Cat2");
+            Assert.IsTrue(result[1].Name == "Книга4" && result[1].Category == "Cat2");
+        }
+
+        [TestMethod]
+        public void Can_Create_Categories() // Bозможности генерации списка категорий. Cоздании списка, который отсортирован в алфавитном порядке и не содержит дубликатов.
+        {
+            // Организация - создание имитированного хранилища
+            Mock<IBookRepository> mock = new Mock<IBookRepository>();
+            mock.Setup(m => m.Books).Returns(new List<Book> {
+        new Book { BookId = 1, Name = "Книга1", Category="Программирования"},
+        new Book { BookId = 2, Name = "Книга2", Category="Роман"},
+        new Book { BookId = 3, Name = "Книга3", Category="Пьеса"},
+        new Book { BookId = 4, Name = "Книга4", Category="Мир Ислама"},
+    });
+
+            // Организация - создание контроллера
+            NavController target = new NavController(mock.Object);
+
+            // Действие - получение набора категорий
+            List<string> results = ((IEnumerable<string>)target.Menu().Model).ToList();
+
+            // Утверждение
+            Assert.AreEqual(results.Count(), 4);
+            Assert.AreEqual(results[0], "Мир Ислама");
+            Assert.AreEqual(results[1], "Программирования");
+            Assert.AreEqual(results[2], "Пьеса");
+            Assert.AreEqual(results[2], "Мир Ислама");
+        }
     }
 }
