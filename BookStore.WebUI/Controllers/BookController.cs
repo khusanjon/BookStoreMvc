@@ -33,7 +33,8 @@ namespace BookStore.WebUI.Controllers
                 {
                     CurrentPage = page,
                     ItemsPerPage = pageSize,
-                    TotalItems = repository.Books.Count()
+                    TotalItems = category == null ?
+                repository.Books.Count() : repository.Books.Where(book => book.Category == category).Count()
                 },
                 CurrentCategory = category
             };

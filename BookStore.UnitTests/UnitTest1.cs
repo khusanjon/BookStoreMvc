@@ -122,7 +122,7 @@ namespace BookStore.UnitTests
             Assert.AreEqual(result.Count(), 2);
             Assert.IsTrue(result[0].Name == "Книга2" && result[0].Category == "Cat2");
             Assert.IsTrue(result[1].Name == "Книга4" && result[1].Category == "Cat2");
-        }
+        } // Фильтрация по категории
 
         [TestMethod]
         public void Can_Create_Categories() // Bозможности генерации списка категорий. Cоздании списка, который отсортирован в алфавитном порядке и не содержит дубликатов.
@@ -130,11 +130,11 @@ namespace BookStore.UnitTests
             // Организация - создание имитированного хранилища
             Mock<IBookRepository> mock = new Mock<IBookRepository>();
             mock.Setup(m => m.Books).Returns(new List<Book> {
-        new Book { BookId = 1, Name = "Книга1", Category="Программирования"},
-        new Book { BookId = 2, Name = "Книга2", Category="Роман"},
-        new Book { BookId = 3, Name = "Книга3", Category="Пьеса"},
-        new Book { BookId = 4, Name = "Книга4", Category="Мир Ислама"},
-    });
+                new Book { BookId = 1, Name = "Книга1", Category="Программирования"},
+                new Book { BookId = 2, Name = "Книга2", Category="Роман"},
+                new Book { BookId = 3, Name = "Книга3", Category="Пьеса"},
+                new Book { BookId = 4, Name = "Книга4", Category="Мир Ислама"},
+            });
 
             // Организация - создание контроллера
             NavController target = new NavController(mock.Object);
@@ -147,7 +147,59 @@ namespace BookStore.UnitTests
             Assert.AreEqual(results[0], "Мир Ислама");
             Assert.AreEqual(results[1], "Программирования");
             Assert.AreEqual(results[2], "Пьеса");
-            Assert.AreEqual(results[2], "Мир Ислама");
+            Assert.AreEqual(results[3], "Роман");
+        }
+
+        [TestMethod]
+        public void Indicates_Selected_Category() // Cообщение о выбранной категории
+        {
+            // Организация - создание имитированного хранилища
+            Mock<IBookRepository> mock = new Mock<IBookRepository>();
+            mock.Setup(m => m.Books).Returns(new Book[] {
+                new Book { BookId = 1, Name = "Книга1", Category="Мир Ислама"},
+                new Book { BookId = 2, Name = "Книга2", Category="Программирования"}
+            });
+
+            // Организация - создание контроллера
+            NavController target = new NavController(mock.Object);
+
+            // Организация - определение выбранной категории
+            string categoryToSelect = "Мир Ислама";
+
+            // Действие
+            string result = target.Menu(categoryToSelect).ViewBag.SelectedCategory;
+
+            // Утверждение
+            Assert.AreEqual(categoryToSelect, result);
+        }
+
+        [TestMethod]
+        public void Generate_Category_Specific_Book_Count()
+        {
+            /// Организация (arrange)
+            Mock<IBookRepository> mock = new Mock<IBookRepository>();
+            mock.Setup(m => m.Books).Returns(new List<Book>
+            {
+                new Book { BookId = 1, Name = "Книга1", Category="Cat1"},
+                new Book { BookId = 2, Name = "Книга2", Category="Cat2"},
+                new Book { BookId = 3, Name = "Книга3", Category="Cat1"},
+                new Book { BookId = 4, Name = "Книга4", Category="Cat2"},
+                new Book { BookId = 5, Name = "Книга5", Category="Cat3"}
+            });
+            BookController controller = new BookController(mock.Object);
+            controller.pageSize = 3;
+
+            // Действие - тестирование счетчиков товаров для различных категорий
+            int res1 = ((BooksListViewModel)controller.List("Cat1").Model).PagingInfo.TotalItems;
+            int res2 = ((BooksListViewModel)controller.List("Cat2").Model).PagingInfo.TotalItems;
+            int res3 = ((BooksListViewModel)controller.List("Cat3").Model).PagingInfo.TotalItems;
+            int resAll = ((BooksListViewModel)controller.List(null).Model).PagingInfo.TotalItems;
+
+            // Утверждение
+            Assert.AreEqual(res1, 2);
+            Assert.AreEqual(res2, 2);
+            Assert.AreEqual(res3, 1);
+            Assert.AreEqual(resAll, 5);
         }
     }
 }
