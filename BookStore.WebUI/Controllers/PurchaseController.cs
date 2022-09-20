@@ -13,10 +13,21 @@ namespace BookStore.WebUI.Controllers
     {
 
         private IBookRepository repository;
-        public PurchaseController(IBookRepository repo)
+        private IOrderProcessor orderProcessor;
+
+        public PurchaseController(IBookRepository repo, IOrderProcessor processor)
         {
             repository = repo;
+            orderProcessor = processor;
+
         }
+
+        public ViewResult Checkout()
+        {
+            return View(new ShippingDetails());
+        }
+
+
         public ViewResult Index(Purchase purchase, string returnUrl)
         {
             return View(new PurchaseIndexViewModel
@@ -24,6 +35,26 @@ namespace BookStore.WebUI.Controllers
                 Purchase = purchase,
                 ReturnUrl = returnUrl
             });
+        }
+
+        [HttpPost]
+        public ViewResult Checkout(Purchase purchase, ShippingDetails shippingDetails)
+        {
+            if (purchase.Lines.Count() == 0)
+            {
+                ModelState.AddModelError("", "Извините, ваша корзина пуста!");
+            }
+
+            if (ModelState.IsValid)
+            {
+                orderProcessor.ProcessOrder(purchase, shippingDetails);
+                purchase.Clear();
+                return View("Completed");
+            }
+            else
+            {
+                return View(shippingDetails);
+            }
         }
 
         public RedirectToRouteResult AddToPurchase(Purchase purchase, int bookId, string returnUrl)
@@ -53,6 +84,11 @@ namespace BookStore.WebUI.Controllers
         public PartialViewResult Summary(Purchase purchase)
         {
             return PartialView(purchase);
+        }
+
+        public ViewResult Checkout(Purchase purchase, ShippingDetails shippingDetails)
+        {
+            return View(new ShippingDetails());
         }
     }
 }

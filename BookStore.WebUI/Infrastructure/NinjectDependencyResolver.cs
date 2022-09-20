@@ -35,7 +35,16 @@ namespace BookStore.WebUI.Infrastructure
         private void AddBindings()
         {
             // Здесь размещаются привязки            
-            kernel.Bind<IBookRepository>().To<EFBookRepository>();                       
+            kernel.Bind<IBookRepository>().To<EFBookRepository>();
+
+            EmailSettings emailSettings = new EmailSettings
+            {
+                WriteAsFile = bool.Parse(ConfigurationManager
+                    .AppSettings["Email.WriteAsFile"] ?? "false")
+            };
+
+            kernel.Bind<IOrderProcessor>().To<EmailOrderProcessor>()
+                .WithConstructorArgument("settings", emailSettings);
         }
     }
 }

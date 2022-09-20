@@ -127,8 +127,8 @@ namespace BookStore.UnitTests
             // Организация - создание имитированного хранилища
             Mock<IBookRepository> mock = new Mock<IBookRepository>();
             mock.Setup(m => m.Books).Returns(new List<Book> {
-        new Book {BookId = 1, Name = "Книга1", Category = "Кат1"},
-    }.AsQueryable());
+            new Book {BookId = 1, Name = "Книга1", Category = "Кат1"},
+        }.AsQueryable());
 
             // Организация - создание корзины
             Purchase purchase = new Purchase();
@@ -153,8 +153,8 @@ namespace BookStore.UnitTests
             // Организация - создание имитированного хранилища
             Mock<IBookRepository> mock = new Mock<IBookRepository>();
             mock.Setup(m => m.Books).Returns(new List<Book> {
-        new Book {BookId = 1, Name = "Книга1", Category = "Кат1"},
-    }.AsQueryable());
+            new Book {BookId = 1, Name = "Книга1", Category = "Кат1"},
+        }.AsQueryable());
 
             // Организация - создание корзины
             Purchase purchase = new Purchase();
@@ -188,5 +188,91 @@ namespace BookStore.UnitTests
             Assert.AreSame(result.Purchase, purchase);
             Assert.AreEqual(result.ReturnUrl, "myUrl");
         }
+
+        [TestMethod]
+        public void Cannot_Checkout_Empty_Purchase()
+        {
+            // Организация - создание имитированного обработчика заказов
+            Mock<IOrderProcessor> mock = new Mock<IOrderProcessor>();
+
+            // Организация - создание пустой корзины
+            Purchase purchase = new Purchase();
+
+            // Организация - создание деталей о доставке
+            ShippingDetails shippingDetails = new ShippingDetails();
+
+            // Организация - создание контроллера
+                PurchaseController controller = new PurchaseController(null, mock.Object);
+
+            // Действие
+            ViewResult result = controller.Checkout(purchase, shippingDetails);
+
+            // Утверждение — проверка, что заказ не был передан обработчику 
+            mock.Verify(m => m.ProcessOrder(It.IsAny<Purchase>(), It.IsAny<ShippingDetails>()),
+                Times.Never());
+
+            // Утверждение — проверка, что метод вернул стандартное представление 
+            Assert.AreEqual("", result.ViewName);
+
+            // Утверждение - проверка, что-представлению передана неверная модель
+            Assert.AreEqual(false, result.ViewData.ModelState.IsValid);
+        }
+
+        [TestMethod]
+        public void Cannot_Checkout_Invalid_ShippingDetails()
+        {
+            // Организация - создание имитированного обработчика заказов
+            Mock<IOrderProcessor> mock = new Mock<IOrderProcessor>();
+
+            // Организация — создание корзины с элементом
+            Purchase purchase = new Purchase();
+            purchase.AddItem(new Book(), 1);
+
+            // Организация — создание контроллера
+            PurchaseController controller = new PurchaseController(null, mock.Object);
+
+            // Организация — добавление ошибки в модель
+            controller.ModelState.AddModelError("error", "error");
+
+            // Действие - попытка перехода к оплате
+            ViewResult result = controller.Checkout(purchase, new ShippingDetails());
+
+            // Утверждение - проверка, что заказ не передается обработчику
+            mock.Verify(m => m.ProcessOrder(It.IsAny<Purchase>(), It.IsAny<ShippingDetails>()),
+                Times.Never());
+
+            // Утверждение - проверка, что метод вернул стандартное представление
+            Assert.AreEqual("", result.ViewName);
+
+            // Утверждение - проверка, что-представлению передана неверная модель
+            Assert.AreEqual(false, result.ViewData.ModelState.IsValid);
+        }
+
+        [TestMethod]
+public void Can_Checkout_And_Submit_Order()
+{
+    // Организация - создание имитированного обработчика заказов
+    Mock<IOrderProcessor> mock = new Mock<IOrderProcessor>();
+
+    // Организация — создание корзины с элементом
+    Purchase purchase = new Purchase();
+    purchase.AddItem(new Book(), 1);
+
+    // Организация — создание контроллера
+    PurchaseController controller = new PurchaseController(null, mock.Object);
+
+    // Действие - попытка перехода к оплате
+    ViewResult result = controller.Checkout(purchase, new ShippingDetails());
+
+    // Утверждение - проверка, что заказ передан обработчику
+    mock.Verify(m => m.ProcessOrder(It.IsAny<Purchase>(), It.IsAny<ShippingDetails>()),
+        Times.Once());
+
+    // Утверждение - проверка, что метод возвращает представление 
+    Assert.AreEqual("Completed", result.ViewName);
+
+    // Утверждение - проверка, что представлению передается допустимая модель
+    Assert.AreEqual(true, result.ViewData.ModelState.IsValid);
+}
     }
 }

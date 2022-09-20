@@ -155,6 +155,7 @@
     <Content Include="Views\Nav\Menu.cshtml" />
     <Content Include="Views\Purchase\Index.cshtml" />
     <Content Include="Views\Purchase\Summary.cshtml" />
+    <Content Include="Views\Purchase\Checkout.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
