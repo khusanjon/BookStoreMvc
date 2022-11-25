@@ -60,7 +60,7 @@ namespace BookStore.UnitTests
         [TestMethod]
         public void Can_Remove_Line()
         {
-            // Организация - создание нескольких тестовых игр
+            // Организация - создание нескольких тестовых книг
             Book book1 = new Book { BookId = 1, Name = "Книга1" };
             Book book2 = new Book { BookId = 2, Name = "Книга2" };
             Book book3 = new Book { BookId = 3, Name = "Книга3" };
@@ -84,7 +84,7 @@ namespace BookStore.UnitTests
         [TestMethod]
         public void Calculate_Cart_Total()
         {
-            // Организация - создание нескольких тестовых игр
+            // Организация - создание нескольких тестовых книг
             Book book1 = new Book { BookId = 1, Name = "Книга1", Price = 100 };
             Book book2 = new Book { BookId = 2, Name = "Книга2", Price = 55 };
 
@@ -104,7 +104,7 @@ namespace BookStore.UnitTests
         [TestMethod]
         public void Can_Clear_Contents()
         {
-            // Организация - создание нескольких тестовых игр
+            // Организация - создание нескольких тестовых книг
             Book book1 = new Book { BookId = 1, Name = "Книга1", Price = 100 };
             Book book2 = new Book { BookId = 2, Name = "Книга2", Price = 55 };
 
