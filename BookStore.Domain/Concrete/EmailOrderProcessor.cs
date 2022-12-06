@@ -16,7 +16,7 @@ namespace BookStore.Domain.Concrete
         public string ServerName = "smtp.example.com";
         public int ServerPort = 587;
         public bool WriteAsFile = true;
-        public string FileLocation = @"c:\book_store_emails";
+        public string FileLocation = @"D:\bepro\Book_store_emails";
     }
 
     public class EmailOrderProcessor : IOrderProcessor

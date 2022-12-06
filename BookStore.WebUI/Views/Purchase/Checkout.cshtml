@@ -10,11 +10,11 @@
 @using (Html.BeginForm())
 {
     <h3>Данные</h3>
+    @Html.ValidationSummary();
     <div class="form-group">
         <label>Ваше имя:</label>
         @Html.TextBoxFor(x => x.Name, new { @class = "form-control" })
     </div>
-
     <h3>Адрес доставки</h3>
     foreach (var property in ViewData.ModelMetadata.Properties)
     {
@@ -26,7 +26,6 @@
             </div>
         }
     }
-
     <h3>Опции</h3>
     <div class="checkbox">
         <label>
@@ -34,7 +33,6 @@
             Использовать подарочную упаковку?
         </label>
     </div>
-
     <div class="text-center">
         <input class="btn btn-primary" type="submit" value="Обработать заказ" />
     </div>
