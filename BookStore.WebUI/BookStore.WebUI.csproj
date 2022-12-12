@@ -153,11 +153,14 @@
     <Content Include="Views\Book\List.cshtml" />
     <Content Include="Scripts\jquery-1.9.0.min.map" />
     <Content Include="Views\Shared\BookSummary.cshtml" />
-    <Content Include="Views\Nav\Menu.cshtml" />
     <Content Include="Views\Purchase\Index.cshtml" />
     <Content Include="Views\Purchase\Summary.cshtml" />
     <Content Include="Views\Purchase\Checkout.cshtml" />
     <Content Include="Views\Purchase\Completed.cshtml" />
+    <Content Include="Views\Nav\FlexMenu.cshtml" />
+    <Content Include="Views\Shared\_Layout.Mobile.cshtml" />
+    <Content Include="Views\Nav\FlexMenu.Mobile.cshtml" />
+    <Content Include="Views\Shared\GameSummary.Mobile.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -1,7 +1,10 @@
 ﻿using BookStore.Domain.Abstract;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
+
 
 namespace BookStore.WebUI.Controllers
 {
@@ -22,7 +25,7 @@ namespace BookStore.WebUI.Controllers
                 .Select(book => book.Category)
                 .Distinct()
                 .OrderBy(x => x);
-            return PartialView(categories);
+            return PartialView("FlexMenu", categories);
         }
     }
 }

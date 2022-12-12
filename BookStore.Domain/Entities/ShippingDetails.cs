@@ -24,6 +24,7 @@ namespace BookStore.Domain.Entities
         [Display(Name = "Улица")]
         public string Line1 { get; set; }
 
+        [Required(ErrorMessage = "Вставьте адрес доставки")]
         [Display(Name = "Дом")]
         public string Line2 { get; set; }
 

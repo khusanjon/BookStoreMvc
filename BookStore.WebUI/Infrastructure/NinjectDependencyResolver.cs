@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Web.Mvc;
-using Moq;
 using Ninject;
-using BookStore.Domain.Entities;
 using BookStore.Domain.Abstract;
 using BookStore.Domain.Concrete;
 

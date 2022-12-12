@@ -13,7 +13,7 @@ using BookStore.WebUI.HtmlHelpers;
 namespace BookStore.UnitTests
 {
     [TestClass]
-    public class UnitTest1 
+    public class BookTest1 
     {
         [TestMethod]
         public void Can_Paginate() // Можно разбить на страницы
@@ -203,75 +203,6 @@ namespace BookStore.UnitTests
         }
 
 
-        /// <summary>
-        /// Проверяем добавление в корзину
-        /// </summary>
-        [TestMethod]
-        public void Can_Add_To_Purchase()
-        {
-            // Организация - создание имитированного хранилища
-            Mock<IBookRepository> mock = new Mock<IBookRepository>();
-            mock.Setup(m => m.Books).Returns(new List<Book> {
-        new Book {BookId = 1, Name = "Книга1", Category = "Кат1"},
-    }.AsQueryable());
-
-            // Организация - создание корзины
-            Purchase purchase  = new Purchase();
-
-            // Организация - создание контроллера
-            PurchaseController controller = new PurchaseController(mock.Object);
-
-            // Действие - добавить игру в корзину
-            controller.AddToPurchase(purchase, 1, null);
-
-            // Утверждение
-            Assert.AreEqual(purchase.Lines.Count(), 1);
-            Assert.AreEqual(purchase.Lines.ToList()[0].Book.BookId, 1);
-        }
-
-        /// <summary>
-        /// После добавления книги в корзину, должно быть перенаправление на страницу корзины
-        /// </summary>
-        [TestMethod]
-        public void Adding_Book_To_Purchase_Goes_To_Purchase_Screen()
-        {
-            // Организация - создание имитированного хранилища
-            Mock<IBookRepository> mock = new Mock<IBookRepository>();
-            mock.Setup(m => m.Books).Returns(new List<Book> {
-        new Book {BookId = 1, Name = "Книга1", Category = "Кат1"},
-    }.AsQueryable());
-
-            // Организация - создание корзины
-            Purchase purchase = new Purchase();
-
-            // Организация - создание контроллера
-            PurchaseController controller = new PurchaseController(mock.Object);
-
-            // Действие - добавить игру в корзину
-            RedirectToRouteResult result = controller.AddToPurchase(purchase, 2, "myUrl");
-
-            // Утверждение
-            Assert.AreEqual(result.RouteValues["action"], "Index");
-            Assert.AreEqual(result.RouteValues["returnUrl"], "myUrl");
-        }
-
-        // Проверяем URL
-        [TestMethod]
-        public void Can_View_Purchase_Contents()
-        {
-            // Организация - создание корзины
-            Purchase purchase = new Purchase();
-
-            // Организация - создание контроллера
-            PurchaseController target = new PurchaseController(null);
-
-            // Действие - вызов метода действия Index()
-            PurchaseIndexViewModel result
-                = (PurchaseIndexViewModel)target.Index(purchase, "myUrl").ViewData.Model;
-
-            // Утверждение
-            Assert.AreSame(result.Purchase, purchase);
-            Assert.AreEqual(result.ReturnUrl, "myUrl");
-        }
+        
     }
 }
