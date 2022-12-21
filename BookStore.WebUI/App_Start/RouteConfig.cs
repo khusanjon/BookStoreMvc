@@ -26,7 +26,8 @@ namespace BookStore.WebUI
             routes.MapRoute(
                 name: null,
                 url: "Page{page}",
-                defaults: new { controller = "Book", action = "List", category = (string)null }
+                defaults: new { controller = "Book", action = "List", category = (string)null },
+                constraints: new { page = @"\d+" }
             );
 
             routes.MapRoute(null,

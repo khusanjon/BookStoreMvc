@@ -9,8 +9,8 @@
 
 @using (Html.BeginForm())
 {
-    <h3>Данные</h3>
     @Html.ValidationSummary();
+    <h3>Данные</h3>
     <div class="form-group">
         <label>Ваше имя:</label>
         @Html.TextBoxFor(x => x.Name, new { @class = "form-control" })

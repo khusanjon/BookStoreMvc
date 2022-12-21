@@ -5,6 +5,8 @@ using System.Web.Mvc;
 using Ninject;
 using BookStore.Domain.Abstract;
 using BookStore.Domain.Concrete;
+using BookStore.WebUI.Infrastructure.Concrete;
+using BookStore.WebUI.Infrastructure.Abstract;
 
 namespace BookStore.WebUI.Infrastructure
 {
@@ -32,7 +34,7 @@ namespace BookStore.WebUI.Infrastructure
 
         private void AddBindings()
         {
-            // Здесь размещаются привязки            
+            // Здесь размещон привязки            
             kernel.Bind<IBookRepository>().To<EFBookRepository>();
 
             EmailSettings emailSettings = new EmailSettings
@@ -43,6 +45,7 @@ namespace BookStore.WebUI.Infrastructure
 
             kernel.Bind<IOrderProcessor>().To<EmailOrderProcessor>()
                 .WithConstructorArgument("settings", emailSettings);
+            kernel.Bind<IAuthProvider>().To<FormAuthProvider>();
         }
     }
 }

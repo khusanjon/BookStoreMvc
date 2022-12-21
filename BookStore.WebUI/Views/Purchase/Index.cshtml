@@ -23,22 +23,22 @@
     <tbody>
         @foreach (var line in Model.Purchase.Lines)
         {
-            <tr>
-                <td class="text-center">@line.Quantity</td>
-                <td class="text-left">@line.Book.Name</td>
-                <td class="text-right">@line.Book.Price.ToString("# Сум")</td>
-                <td class="text-right">
-                    @((line.Quantity * line.Book.Price).ToString("# Сум"))
-                </td>
-            </tr>
-        <td>
-            @using (Html.BeginForm("RemoveFromPurchase", "Purchase"))
-            {
-                @Html.Hidden("BookId", line.Book.BookId)
-                @Html.HiddenFor(x => x.ReturnUrl)
-                <input class="btn btn-sm btn-warning" type="submit" value="Удалить" />
-            }
-        </td>
+        <tr>
+            <td class="text-center">@line.Quantity</td>
+            <td class="text-left">@line.Book.Name</td>
+            <td class="text-right">@line.Book.Price.ToString("# Сум")</td>
+            <td class="text-right">
+                @((line.Quantity * line.Book.Price).ToString("# Сум"))
+            </td>
+            <td>
+                @using (Html.BeginForm("RemoveFromPurchase", "Purchase"))
+                {
+                    @Html.Hidden("BookId", line.Book.BookId)
+                    @Html.HiddenFor(x => x.ReturnUrl)
+                    <input class="btn btn-sm btn-warning" type="submit" value="Удалить" />
+                }
+            </td>
+        </tr>
         }
     </tbody>
     <tfoot>

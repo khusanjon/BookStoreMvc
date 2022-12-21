@@ -29,7 +29,7 @@ namespace BookStore.WebUI.Controllers
         public RedirectToRouteResult AddToPurchase(Purchase purchase, int bookId, string returnUrl)
         {
             Book book = repository.Books
-                .FirstOrDefault(g => g.BookId == bookId);
+                .FirstOrDefault(b => b.BookId == bookId);
 
             if (book != null)
             {
@@ -41,7 +41,7 @@ namespace BookStore.WebUI.Controllers
         public RedirectToRouteResult RemoveFromPurchase(Purchase purchase, int bookId, string returnUrl)
         {
             Book book = repository.Books
-                .FirstOrDefault(g => g.BookId == bookId);
+                .FirstOrDefault(b => b.BookId == bookId);
 
             if (book != null)
             {

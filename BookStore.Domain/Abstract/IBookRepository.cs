@@ -8,5 +8,7 @@ namespace BookStore.Domain.Abstract
         // получать последовательность объектов Book
         // Класс, зависящий от интерфейса IBookRepository, может получать объекты Book
         IEnumerable<Book> Books { get; }
+        void SaveBook(Book book);
+        Book DeleteBook(int bookId);
     }
 }

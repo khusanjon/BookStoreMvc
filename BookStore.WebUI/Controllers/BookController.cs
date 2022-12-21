@@ -14,19 +14,19 @@ namespace BookStore.WebUI.Controllers
         // GET: Book
         private IBookRepository repository;
         // PageSize указывает, что на одной странице должны отображаться 5 товаров
-        public int pageSize = 5; 
+        public int pageSize = 5;
+        public string cat;
         public BookController(IBookRepository repo)
         {
             repository = repo;
         }
-
         public ViewResult List(string category, int page = 1)
         {
             BooksListViewModel model = new BooksListViewModel
             {
                 Books = repository.Books
                     .Where(p => category == null || p.Category == category)
-                    .OrderBy(game => game.BookId)
+                    .OrderBy(book => book.BookId)
                     .Skip((page - 1) * pageSize)
                     .Take(pageSize),
                 PagingInfo = new PagingInfo
@@ -40,6 +40,21 @@ namespace BookStore.WebUI.Controllers
                 CurrentCategory = category
             };
             return View(model);
+        }
+
+        public FileContentResult GetImage(int bookId)
+        {
+            Book book = repository.Books
+                .FirstOrDefault(b => b.BookId == bookId);
+
+            if (book != null)
+            {
+                return File(book.ImageData, book.ImageMimeType);
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }
