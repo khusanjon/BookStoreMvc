@@ -15,14 +15,14 @@ namespace GameStore.UnitTests
         {
             // Организация - создание имитации поставщика аутентификации
             Mock<IAuthProvider> mock = new Mock<IAuthProvider>();
-            mock.Setup(m => m.Authenticate("admin", "12345")).Returns(true);
+            mock.Setup(m => m.Authenticate("husanjon", "1234")).Returns(true);
 
             // Организация - создание модели представления
             // с правильными учетными данными
             LoginViewModel model = new LoginViewModel
             {
-                UserName = "admin",
-                Password = "12345"
+                UserName = "husanjon",
+                Password = "1234"
             };
 
             // Организация - создание контроллера
@@ -41,14 +41,14 @@ namespace GameStore.UnitTests
         {
             // Организация - создание имитации поставщика аутентификации
             Mock<IAuthProvider> mock = new Mock<IAuthProvider>();
-            mock.Setup(m => m.Authenticate("badUser", "badPass")).Returns(false);
+            mock.Setup(m => m.Authenticate("User", "Password")).Returns(false);
 
             // Организация - создание модели представления
             // с некорректными учетными данными
             LoginViewModel model = new LoginViewModel
             {
-                UserName = "badUser",
-                Password = "badPass"
+                UserName = "User",
+                Password = "Password"
             };
 
             // Организация - создание контроллера
